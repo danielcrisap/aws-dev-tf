@@ -1,5 +1,6 @@
 provider.tf
 backend.tf
+.terraform.lock.hcl
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,linux,terraform,terragrunt,visualstudiocode,intellij+all
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,linux,terraform,terragrunt,visualstudiocode,intellij+all
