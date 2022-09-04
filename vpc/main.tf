@@ -10,10 +10,10 @@ module "vpc" {
   azs = ["${var.region}a", "${var.region}b", "${var.region}c"]
 
   # For use on ALBs, ApiGateways and External facing applications.
-  public_subnets = ["10.0.0.0/20", "10.0.16.0/20", "10.0.32.0/20"]
+  public_subnets     = ["10.0.0.0/20", "10.0.16.0/20", "10.0.32.0/20"]
   public_subnet_tags = {
     "kubernetes.io/cluster/${var.env}" = "owned"
-    "kubernetes.io/role/elb" = 1
+    "kubernetes.io/role/elb"           = 1
   }
 
   # For main use, all nodes and provide applications.
@@ -28,8 +28,10 @@ module "vpc" {
   enable_ipv6        = false
   enable_classiclink = false
 
-  enable_nat_gateway = false
-  enable_vpn_gateway = false
+  enable_nat_gateway     = true
+  single_nat_gateway     = false
+  one_nat_gateway_per_az = true
+  enable_vpn_gateway     = false
 
   tags = local.tags
 }
@@ -44,9 +46,9 @@ resource "aws_subnet" "k8s_extra_subnet" {
   cidr_block        = each.value
 
   tags = merge(local.tags, {
-    Name = "${var.env}-vpc-k8s-${each.key}"
+    Name                               = "${var.env}-vpc-k8s-${each.key}"
     "kubernetes.io/cluster/${var.env}" = "owned"
-    "kubernetes.io/role/internal-elb" = 1
+    "kubernetes.io/role/internal-elb"  = 1
   })
   depends_on = [
     module.vpc
