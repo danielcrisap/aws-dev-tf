@@ -1,7 +1,7 @@
 locals {
   common_vars = yamldecode(file(find_in_parent_folders("common_vars.yaml")))
 
-  env = local.common_vars.env
+  env    = local.common_vars.env
   region = local.common_vars.aws_region
 }
 
@@ -21,7 +21,7 @@ inputs = {
   cluster_name    = local.common_vars.env
   cluster_version = "1.23"
 
-  cluster_enabled_log_types = []
+  cluster_enabled_log_types       = []
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
 
@@ -29,7 +29,7 @@ inputs = {
     coredns = {
       resolve_conflicts = "OVERWRITE"
     }
-    kube-proxy = {}
+    kube-proxy         = {}
     aws-ebs-csi-driver = {
       resolve_conflicts = "OVERWRITE"
     }
@@ -39,13 +39,13 @@ inputs = {
   }
 
   vpc_id     = dependency.vpc.outputs.vpc_id
-  subnet_ids = dependency.vpc.outputs.public_subnets
+  subnet_ids = dependency.vpc.outputs.k8s_private_subnets
 
   # Self Managed Node Group(s)
   self_managed_node_group_defaults = {
     instance_type                          = "t2.micro"
     update_launch_template_default_version = true
-    iam_role_additional_policies = [
+    iam_role_additional_policies           = [
       "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
     ]
   }
@@ -62,9 +62,15 @@ inputs = {
   ]
 
   create_kms_key = true
+  
+  cluster_encryption_config = [
+    {
+      resources = ["secrets"]
+    }
+  ]
 
   tags = {
-    Terraform = "true"
+    Terraform   = "true"
     Environment = local.env
   }
 }

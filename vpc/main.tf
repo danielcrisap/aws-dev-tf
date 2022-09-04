@@ -11,6 +11,10 @@ module "vpc" {
 
   # For use on ALBs, ApiGateways and External facing applications.
   public_subnets = ["10.0.0.0/20", "10.0.16.0/20", "10.0.32.0/20"]
+  public_subnet_tags = {
+    "kubernetes.io/cluster/${var.env}" = "owned"
+    "kubernetes.io/role/elb" = 1
+  }
 
   # For main use, all nodes and provide applications.
   # Available subnet blocks
@@ -41,6 +45,8 @@ resource "aws_subnet" "k8s_extra_subnet" {
 
   tags = merge(local.tags, {
     Name = "${var.env}-vpc-k8s-${each.key}"
+    "kubernetes.io/cluster/${var.env}" = "owned"
+    "kubernetes.io/role/internal-elb" = 1
   })
   depends_on = [
     module.vpc
