@@ -5,7 +5,7 @@ locals {
   account_name = local.common_vars.account_name
   account_id   = local.common_vars.aws_account_id
   aws_region   = local.common_vars.aws_region
-  env = local.common_vars.env
+  env          = local.common_vars.env
 }
 
 # Generate an AWS provider block

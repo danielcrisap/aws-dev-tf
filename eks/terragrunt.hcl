@@ -14,8 +14,8 @@ dependency "vpc" {
 }
 
 inputs = {
-  env = local.env
-  region = local.region
-  vpc_id = dependency.vpc.outputs.vpc_id
+  env                 = local.env
+  region              = local.region
+  vpc_id              = dependency.vpc.outputs.vpc_id
   vpc_k8s_subnets_ids = dependency.vpc.outputs.k8s_private_subnets
 }

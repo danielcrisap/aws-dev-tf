@@ -14,9 +14,9 @@ module "eks" {
       resolve_conflicts = "OVERWRITE"
     }
     kube-proxy         = {}
-#    aws-ebs-csi-driver = {
-#      resolve_conflicts = "OVERWRITE"
-#    }
+    aws-ebs-csi-driver = {
+      resolve_conflicts = "OVERWRITE"
+    }
     vpc-cni = {
       resolve_conflicts = "OVERWRITE"
     }

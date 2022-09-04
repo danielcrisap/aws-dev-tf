@@ -1,7 +1,7 @@
 locals {
   common_vars = yamldecode(file(find_in_parent_folders("common_vars.yaml")))
 
-  env = local.common_vars.env
+  env    = local.common_vars.env
   region = local.common_vars.aws_region
 }
 
@@ -10,6 +10,6 @@ include "root" {
 }
 
 inputs = {
-  env = local.env
+  env    = local.env
   region = local.region
 }
