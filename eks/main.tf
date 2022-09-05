@@ -1,9 +1,19 @@
+locals {
+  cluster_name = var.env
+  tags         = {
+    Terraform   = "true"
+    Environment = var.env
+  }
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "18.29.0"
 
-  cluster_name    = var.env
+  cluster_name    = local.cluster_name
   cluster_version = "1.23"
+
+  enable_irsa = true
 
   cluster_enabled_log_types       = []
   cluster_endpoint_private_access = true
@@ -36,7 +46,6 @@ module "eks" {
     }
   }
 
-
   node_security_group_additional_rules = {
     ingress_self_all = {
       description = "Node to node all ports/protocols"
@@ -60,51 +69,31 @@ module "eks" {
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
     ami_type       = "AL2_x86_64"
-    instance_types = ["t2.micro", "t3.micro", "t3a.micro"]
+    instance_types = ["t3.xlarge"]
   }
-
   eks_managed_node_groups = {
     default = {
-      min_size     = 1
-      max_size     = 4
-      desired_size = 1
+      instance_types = ["t3.xlarge"]
+      min_size       = 2
+      max_size       = 2
+      desired_size   = 2
 
-      disk_size = 20
-      #      capacity_type = "SPOT"
+      update_config = {
+        max_unavailable_percentage = 50
+      }
 
-      use_name_prefix                 = false
-      iam_role_use_name_prefix        = false
-      launch_template_use_name_prefix = false
-
-      ebs_optimized        = true
-      force_update_version = true
+      iam_role_additional_policies = [
+        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      ]
     }
   }
 
-
-  # aws-auth configmap
-  create_aws_auth_configmap = true
-  manage_aws_auth_configmap = true
-
-  aws_auth_roles = [
-    {
-      rolearn  = "arn:aws:iam::875201320882:role/AWSReservedSSO_AdministratorAccess_f8bbe6eb5ffc9f8c"
-      username = "sso-admin:{{SessionName}}"
-      groups   = ["system:masters"]
-    },
-  ]
-
-  create_kms_key = true
-
+  create_kms_key            = true
   cluster_encryption_config = [
     {
       resources = ["secrets"]
     }
   ]
 
-  cluster_tags = {
-    Name = var.env
-  }
   tags = local.tags
-
 }
