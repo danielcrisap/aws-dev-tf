@@ -5,3 +5,11 @@ updates:
     directory: "/vpc"
     schedule:
       interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/eks"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/k8s-addon"
+    schedule:
+      interval: "daily"
