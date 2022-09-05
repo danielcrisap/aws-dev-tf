@@ -1,0 +1,11 @@
+fullnameOverride: aws-node-termination-handler
+
+targetNodeOs: linux
+enableProbesServer: true
+
+nodeSelector:
+  lifecycle: spot
+
+enableSqsTerminationDraining: false
+enableSpotInterruptionDraining: true
+enableRebalanceMonitoring: true
