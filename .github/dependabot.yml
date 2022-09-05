@@ -10,6 +10,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/k8s-addon"
+    directory: "/k8s-addons"
     schedule:
       interval: "daily"
