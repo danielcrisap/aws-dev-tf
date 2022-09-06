@@ -1,12 +1,6 @@
-locals {
-  common_vars = yamldecode(file(find_in_parent_folders("common_vars.yaml")))
-
-  env    = local.common_vars.env
-  region = local.common_vars.aws_region
-}
-
 include "root" {
-  path = find_in_parent_folders()
+  path   = find_in_parent_folders()
+  expose = true
 }
 
 dependency "eks" {
@@ -14,8 +8,8 @@ dependency "eks" {
 }
 
 inputs = {
-  env                 = local.env
-  region              = local.region
+  env                 = include.root.locals.env
+  region              = include.root.locals.aws_region
   eks_ca              = dependency.eks.outputs.eks_ca
   eks_host            = dependency.eks.outputs.eks_host
   eks_id              = dependency.eks.outputs.eks_id

@@ -1,11 +1,11 @@
 locals {
-  common_vars = yamldecode(file("common_vars.yaml"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
   # Extract the variables we need for easy access
-  account_name = local.common_vars.account_name
-  account_id   = local.common_vars.aws_account_id
-  aws_region   = local.common_vars.aws_region
-  env          = local.common_vars.env
+  account_name = local.environment_vars.locals.account_name
+  account_id   = local.environment_vars.locals.aws_account_id
+  aws_region   = local.environment_vars.locals.aws_region
+  env          = local.environment_vars.locals.env
 }
 
 # Generate an AWS provider block
@@ -37,3 +37,8 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
 }
+
+
+inputs = merge(
+  local.environment_vars,
+)
