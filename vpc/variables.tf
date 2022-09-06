@@ -3,7 +3,7 @@ variable "env" {}
 
 locals {
   tags = {
-    Terraform = "true"
+    Terraform   = "true"
     Environment = var.env
   }
 }

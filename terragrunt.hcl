@@ -1,5 +1,5 @@
 locals {
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  environment_vars = try(read_terragrunt_config(find_in_parent_folders("env.hcl")), read_terragrunt_config("env.hcl"))
 
   # Extract the variables we need for easy access
   account_name = local.environment_vars.locals.account_name
@@ -37,7 +37,6 @@ remote_state {
     if_exists = "overwrite_terragrunt"
   }
 }
-
 
 inputs = merge(
   local.environment_vars,

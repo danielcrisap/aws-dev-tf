@@ -1,6 +1,6 @@
 locals {
   cluster_name = var.env
-  tags         = {
+  tags = {
     Terraform   = "true"
     Environment = var.env
   }
@@ -23,7 +23,7 @@ module "eks" {
     coredns = {
       resolve_conflicts = "OVERWRITE"
     }
-    kube-proxy         = {}
+    kube-proxy = {}
     aws-ebs-csi-driver = {
       resolve_conflicts = "OVERWRITE"
     }
@@ -88,7 +88,7 @@ module "eks" {
     }
   }
 
-  create_kms_key            = true
+  create_kms_key = true
   cluster_encryption_config = [
     {
       resources = ["secrets"]
