@@ -1,6 +1,6 @@
 module "aws-node-termination-handler" {
   source  = "cloudposse/helm-release/aws"
-  version = "0.8.1"
+  version = "0.9.1"
 
   name = "aws-node-termination-handler"
 
